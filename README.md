@@ -14,73 +14,80 @@ Addresses | Description
 ---------:|:----------:
 0x10000   | 
           | Vectors
+0xffe0    | 
+          | Program Memory
+0xf000    | 
+          | Unused
+0x0600    | 
+          | Data Memory
+0x0200    | 
+          | 16-bit Peripheral Space
+0x0100    | 
+          | 8-bit Peripheral Space
+0x0010    | 
+          | Special Function Regs
+0x0000    | 
 
-0x10000=====================
-    Vectors
-0xffe0----------------------
-    Program Memory
-0xf000----------------------
-    Unused
-0x0600----------------------
-    Data Memory
-0x0200----------------------
-    16-Bit Peripheral Space
-0x0100----------------------
-    8-Bit Peripheral Space
-0x0010----------------------
-    Special Function Regs
-0x0000======================
+### Foculs on peripherals
+Addresses | Description
+---------:|:----------:
+0x0200    | 
+          | FREE (8)
+0x01f8    | 
+          | DMA Channels ? (24)
+0x01e0    | 
+          | FREE (104)
+0x0178    | 
+          | TimerA (24)
+0x0160    | 
+          | FREE (32)
+0x0140    | 
+          | Hardware Multiplier (16)
+0x0130    | 
+          | Timer A Irq Vector (2)
+0x012E    | 
+          | FREE (10)
+0x0124    | 
+          | DMA Control ? (2)
+0x0122    | 
+          | Watchdog Timer (2)
+0x0120    | 
+          | FREE (32)
+0x0100    | 
 
-Focus on peripherals:
-0x0200======================
-    FREE (8)
-0x01F8----------------------
-    DMA Channels ? (24)
-0x01E0----------------------
-    FREE (104)
-0x0178----------------------
-    Timera A (24)
-0x0160----------------------
-    FREE (32)
-0x0140----------------------
-    Hardware Multiplier (16)
-0x0130----------------------
-    Timer A Irq Vector (2)
-0x012E----------------------
-    FREE (10)
-0x0124----------------------
-    DMA Control ? (2)
-0x0122----------------------
-    Watchdog Timer (2)
-0x0120----------------------
-    FREE (32)
-0x0100======================
-    FREE (122)
-0x0086----------------------
-    UART (6)
-0x0080----------------------
-    FREE (32)
-0x0060----------------------
-    Basic Clock Module (10)
-0x0056----------------------
-    FREE (30)
-0x0038----------------------
-    GPIO.P6 (4)
-0x0034----------------------
-    GPIO.P5 (4)
-0x0030----------------------
-    GPIO.P2 (8)
-0x0028----------------------
-    GPIO.P1 (8)
-0x0020----------------------
-    GPIO.P4 (4)
-0x001C----------------------
-    GPIO.P3 (4)
-0x0018----------------------
-    FREE (8)
-0x0010======================
-    Special Function Regs
-0x0000======================
+Addresses | Description
+---------:|:----------:
+0x0100    | 
+          | FREE (122)
+0x0086    | 
+          | UART (6)
+0x0080    | 
+          | FREE (32)
+0x0060    | 
+          | Basic Clock Module (10)
+0x0056    | 
+          | FREE (30)
+0x0038    | 
+          | GPIO.P6 (4)
+0x0034    | 
+          | GPIO.P5 (4)
+0x0030    | 
+          | GPIO.P2 (8)
+0x0028    | 
+          | GPIO.P1 (8)
+0x0020    | 
+          | GPIO.P4 (4)
+0x001C    | 
+          | GPIO.P3 (4)
+0x0018    | 
+          | FREE (8)
+0x0010    |
+
+Addresses | Description
+---------:|:----------:
+0x0010    |
+          | Special Function Regs
+0x0000    |
 
 ## How to install Quartus
 ### Installation:

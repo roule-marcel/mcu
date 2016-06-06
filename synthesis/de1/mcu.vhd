@@ -8,8 +8,9 @@ use work.omsp_gpio_pkg.all;
 use work.omsp_timerA_pkg.all;
 use work.omsp_uart_pkg.all;
 use work.per_pwm_pkg.all;
+use work.ram16_pkg.all;
 
-entity rt_sopc_de1 is
+entity mcu is
 	port (
 		-- Clock Input
 		CLOCK_24 : in std_logic_vector(1 downto 0);
@@ -92,9 +93,9 @@ entity rt_sopc_de1 is
 		GPIO_0 : inout std_logic_vector(35 downto 0);
 		GPIO_1 : inout std_logic_vector(35 downto 0)
 	);
-end entity rt_sopc_de1;
+end entity mcu;
 
-architecture rtl of rt_sopc_de1 is
+architecture rtl of mcu is
 	-- overall clock
 	signal clk_sys : std_logic;
 	-- reset
@@ -453,6 +454,19 @@ begin
 --	        wren => dmem_wren,
 --	        byteena => not dmem_wen
 --		);
+
+	dram: ram16
+		generic map (
+			DEPTH => 512
+		)
+		port map (
+			clk => clk_sys,
+			cen => dmem_cen,
+			addr => dmem_addr(8 downto 0),
+			din => dmem_din,
+			wen => dmem_wen,
+			dout => dmem_dout
+		);
 --
 --	pmem_wren <= not (pmem_wen(1) and pmem_wen(0));
 --	pram: ram16x2048
@@ -465,6 +479,19 @@ begin
 --	        wren => pmem_wren,
 --	        byteena => not pmem_wen
 --		);
+
+	pram: ram16
+		generic map (
+			DEPTH => 2048
+		)
+		port map (
+			clk => clk_sys,
+			cen => pmem_cen,
+			addr => pmem_addr(10 downto 0),
+			din => pmem_din,
+			wen => pmem_wen,
+			dout => pmem_dout
+		);
 
 	p1_din(7 downto 0) <= SW(7 downto 0);
 	LEDR(7 downto 0) <= p3_dout(7 downto 0) and p3_dout_en(7 downto 0);

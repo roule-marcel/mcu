@@ -12,6 +12,8 @@ if { [info exists ::env(LIBSOFTCORE_PATH)] } {
 	return -1
 }
 
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/packages/math/log2_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/packages/math/body/log2_pkg-body.vhd
 
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/pwm_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/pwm_entity.vhd
@@ -22,8 +24,10 @@ set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/per_pwm_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/per_pwm_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/per_pwm_arch.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/packages/math/log2_pkg.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/packages/math/body/log2_pkg-body.vhd
+
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_entity.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_arch.vhd
 
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/openMSP430/rtl/openMSP430_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/omsp_timerA/rtl/omsp_timerA_pkg.vhd

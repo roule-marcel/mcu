@@ -10,6 +10,11 @@ On ubuntu 15.04 (should also do on other versions):
     sudo apt-get install gcc-msp430
 
 ## Current Memory Map
+Addresses | Description
+---------:|:----------:
+0x10000   | 
+          | Vectors
+
 0x10000=====================
     Vectors
 0xffe0----------------------

@@ -457,12 +457,12 @@ begin
 
 	dram: ram16
 		generic map (
-			DEPTH => 512
+			DEPTH => 2**DMEM_AWIDTH 
 		)
 		port map (
 			clk => clk_sys,
 			cen => dmem_cen,
-			addr => dmem_addr(8 downto 0),
+			addr => dmem_addr(DMEM_MSB downto 0),
 			din => dmem_din,
 			wen => dmem_wen,
 			dout => dmem_dout
@@ -482,12 +482,12 @@ begin
 
 	pram: ram16
 		generic map (
-			DEPTH => 2048
+			DEPTH => 2**PMEM_AWIDTH 
 		)
 		port map (
 			clk => clk_sys,
 			cen => pmem_cen,
-			addr => pmem_addr(10 downto 0),
+			addr => pmem_addr(PMEM_MSB downto 0),
 			din => pmem_din,
 			wen => pmem_wen,
 			dout => pmem_dout

@@ -29,7 +29,6 @@ set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_arch.vhd
 
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/openMSP430/rtl/openMSP430_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/omsp_timerA/rtl/omsp_timerA_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/omsp_gpio/rtl/omsp_gpio_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/omsp_uart/rtl/omsp_uart_pkg.vhd
@@ -41,7 +40,6 @@ set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/
 set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/periph/omsp_timerA.v
 set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/periph/omsp_gpio.v
 set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/openMSP430_undefines.v
-set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/openMSP430_defines.v
 set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/openMSP430.v
 set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/omsp_watchdog.v
 set_global_assignment -name VERILOG_FILE $LIBSOFTCORE_PATH/opencores/openmsp430/core/rtl/verilog/omsp_wakeup_cell.v

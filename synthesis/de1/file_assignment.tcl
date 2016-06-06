@@ -15,15 +15,16 @@ if { [info exists ::env(LIBSOFTCORE_PATH)] } {
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/packages/math/log2_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/packages/math/body/log2_pkg-body.vhd
 
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/pwm_pkg.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/pwm_entity.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/pwm_arch.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_iface/rtl/per_iface_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_iface/rtl/per_iface_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_iface/rtl/per_iface_arch.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/per_pwm_pkg.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/per_pwm_entity.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/pwm/rtl/per_pwm_arch.vhd
+
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/pwm_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/pwm_entity.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/pwm_arch.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/per_pwm_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/per_pwm_entity.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/per_pwm_arch.vhd
 
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_entity.vhd

@@ -31,6 +31,15 @@ entity mcu is
 end entity mcu;
 
 architecture rtl of mcu is
+	component pll is
+	port (
+		areset		: IN STD_LOGIC  := '0';
+		inclk0		: IN STD_LOGIC  := '0';
+		c0		: OUT STD_LOGIC ;
+		locked		: OUT STD_LOGIC 
+	);
+	end component pll;
+
 	-- overall clock
 	signal clk_sys : std_logic;
 	-- reset
@@ -118,15 +127,23 @@ architecture rtl of mcu is
 	-- Choses to connect the bluetooth uart to the debug or to the uart module
 	signal uart_mode : std_logic := '0';
 begin
-	clk_sys <= clk_50; -- no PLL for now
-	reset_n <= keys(0);
+--	clk_sys <= clk_50; -- no PLL for now
+--	reset_n <= keys(0);
+	
+	pll_24: pll
+	port map (
+		areset => not keys(0),
+		inclk0 => clk_50,
+		c0 => clk_sys,
+		locked => reset_n
+	);
 
 	pwm_l_en <= '1';
 	pwm_r_en <= '1';
 
 	p_uart_mode : process (clk_sys, reset_n)
 	begin
-		if (reset_n = 0) then
+		if (reset_n = '0') then
 			uart_mode <= '0';
 		elsif rising_edge(clk_sys) then
 			if ((p3_dout and p3_dout_en) = x"FF") then

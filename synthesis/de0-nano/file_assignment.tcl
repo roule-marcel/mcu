@@ -26,6 +26,7 @@ set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/per_pwm_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/per_pwm_arch.vhd
 
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/init_ram16_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_arch.vhd

@@ -126,6 +126,9 @@ architecture rtl of mcu is
 
 	-- Choses to connect the bluetooth uart to the debug or to the uart module
 	signal uart_mode : std_logic := '0';
+
+	signal counter : natural;
+	signal blink : std_logic;
 begin
 --	clk_sys <= clk_50; -- no PLL for now
 --	reset_n <= keys(0);
@@ -137,6 +140,23 @@ begin
 		c0 => clk_sys,
 		locked => reset_n
 	);
+
+	p_counter : process (reset_n, clk_sys)
+	begin
+		if (reset_n = '0') then
+			counter <= 0;
+			blink <= '0';
+		elsif rising_edge(clk_sys) then
+			if (counter < 24000000) then
+				counter <= counter + 1;
+			else
+				blink <= not blink;
+				counter <= 0;
+			end if;
+		end if;
+	end process p_counter;
+
+	leds(0) <= blink;
 
 	pwm_l_en <= '1';
 	pwm_r_en <= '1';
@@ -189,7 +209,7 @@ begin
 			smclk_en => smclk_en,
 
 			cpu_en => '1',
-			dbg_en => '1',
+			dbg_en => '0',
 			dbg_i2c_addr => (others => '0'),
 			dbg_i2c_broadcast => (others => '0'),
 			dbg_i2c_scl => '1',
@@ -382,7 +402,8 @@ begin
 
 	dram: ram16
 		generic map (
-			DEPTH => 2**DMEM_AWIDTH 
+			DEPTH => 2**DMEM_AWIDTH,
+			INIT_FILE => "none"
 		)
 		port map (
 			clk => clk_sys,
@@ -395,7 +416,8 @@ begin
 
 	pram: ram16
 		generic map (
-			DEPTH => 2**PMEM_AWIDTH 
+			DEPTH => 2**PMEM_AWIDTH,
+			INIT_FILE => "mcu_firmware"
 		)
 		port map (
 			clk => clk_sys,
@@ -407,12 +429,17 @@ begin
 		);
 
 --	p1_din(7 downto 0) <= SW(7 downto 0);
-	leds <= p3_dout and p3_dout_en;
+--	leds <= p3_dout and p3_dout_en;
+	leds(7 downto 1) <= p3_dout(7 downto 1) and p3_dout_en(7 downto 1);
 
 	-- RS-232 Port
 	------------------------
 	-- P1.1 (TX) and P2.2 (RX)
-	uart_bluetooth_txd <= dbg_uart_txd when uart_mode = '0' else hw_uart_txd;
-	dbg_uart_rxd <= uart_bluetooth_rxd when uart_mode = '0' else '0';
-	hw_uart_rxd <= uart_bluetooth_rxd when uart_mode = '1' else '0';
+--	uart_bluetooth_txd <= dbg_uart_txd when uart_mode = '0' else hw_uart_txd;
+--	dbg_uart_rxd <= uart_bluetooth_rxd when uart_mode = '0' else '0';
+--	hw_uart_rxd <= uart_bluetooth_rxd when uart_mode = '1' else '0';
+
+	uart_bluetooth_txd <= hw_uart_txd;
+	hw_uart_rxd <= uart_bluetooth_rxd;
+	
 end architecture rtl;

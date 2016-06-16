@@ -12,104 +12,25 @@ use work.ram16_pkg.all;
 
 entity mcu is
 	port (
-		-- Clock Input
-		CLOCK_24 : in std_logic_vector(1 downto 0);
-		CLOCK_27 : in std_logic_vector(1 downto 0);
-		CLOCK_50 : in std_logic;
-		EXT_CLOCK : in std_logic;
-		-- Push Button
-		KEY : in std_logic_vector(3 downto 0);
-		-- DPDT Switch
-		SW : in std_logic_vector(9 downto 0);
-		-- 7-SEG Display
-		HEX0 : out std_logic_vector(6 downto 0);
-		HEX1 : out std_logic_vector(6 downto 0);
-		HEX2 : out std_logic_vector(6 downto 0);
-		HEX3 : out std_logic_vector(6 downto 0);
-		-- LED
-		LEDG : out std_logic_vector(7 downto 0);
-		LEDR : out std_logic_vector(9 downto 0);
-		-- UART
-		UART_TXD : out std_logic;
-		UART_RXD : in std_logic;
-		-- SDRAM Interface
-		DRAM_DQ : inout std_logic_vector(15 downto 0);
-		DRAM_ADDR : out std_logic_vector(11 downto 0);
-		DRAM_LDQM : out std_logic;
-		DRAM_UDQM : out std_logic;
-		DRAM_WE_N : out std_logic;
-		DRAM_CAS_N : out std_logic;
-		DRAM_RAS_N : out std_logic;
-		DRAM_CS_N : out std_logic;
-		DRAM_BA_0 : out std_logic;
-		DRAM_BA_1 : out std_logic;
-		DRAM_CLK : out std_logic;
-		DRAM_CKE : out std_logic;
-		-- Flash Interface
-		FL_DQ : inout std_logic_vector(7 downto 0);
-		FL_ADDR : out std_logic_vector(21 downto 0);
-		FL_WE_N : out std_logic;
-		FL_RST_N : out std_logic;
-		FL_OE_N : out std_logic;
-		FL_CE_N : out std_logic;
-		-- SRAM Interface
-		SRAM_DQ : inout std_logic_vector(15 downto 0);
-	    SRAM_ADDR : out std_logic_vector(27 downto 0);
-	    SRAM_UB_N : out std_logic;
-	    SRAM_LB_N : out std_logic;
-	    SRAM_WE_N : out std_logic;
-	    SRAM_CE_N : out std_logic;
-	    SRAM_OE_N : out std_logic;
-		-- SD Card Interface
-		SD_DAT : inout std_logic;
-		SD_DAT3 : inout std_logic;
-		SD_CMD : inout std_logic;
-		SD_CLK : out std_logic;
-		-- I2C
-		I2C_SDAT : inout std_logic;
-		I2C_SCLK : out std_logic;
-		-- PS2
-		PS2_DAT : in std_logic;
-		PS2_CLK : in std_logic;
-		-- USB JTAG link
-		TDI : in std_logic;
-		TCK : in std_logic;
-		TCS : in std_logic;
-		TDO : out std_logic;
-		-- VGA
-		VGA_HS : out std_logic;
-		VGA_VS : out std_logic;
-		VGA_R : out std_logic_vector(3 downto 0);
-		VGA_G : out std_logic_vector(3 downto 0);
-		VGA_B : out std_logic_vector(3 downto 0);
-		-- Audio CODEC
-		AUD_ADCLRCK : out std_logic;
-		AUD_ADCDAT : in std_logic;
-		AUD_DACLRCK : out std_logic;
-		AUD_DACDAT : out std_logic;
-		AUD_BCLK : inout std_logic;
-		AUD_XCK : out std_logic;
-		-- GPIO
-		GPIO_0 : inout std_logic_vector(35 downto 0);
-		GPIO_1 : inout std_logic_vector(35 downto 0)
+		-- overall clock
+		clk_sys : in std_logic;
+		-- reset
+		reset_n : in std_logic;
+
+		uart_txd : out std_logic;
+		uart_rxd : in std_logic;
+
+		leds : out std_logic_vector(7 downto 0);
+		sw : in std_logic_vector(7 downto 0);
+
+		pwm_a_0 : out std_logic;
+		pwm_b_0 : out std_logic;
+		pwm_a_1 : out std_logic;
+		pwm_b_1 : out std_logic
 	);
 end entity mcu;
 
 architecture rtl of mcu is
-COMPONENT pll IS
-	PORT
-	(
-		areset		: IN STD_LOGIC  := '0';
-		inclk0		: IN STD_LOGIC  := '0';
-		c0		: OUT STD_LOGIC ;
-		locked		: OUT STD_LOGIC 
-	);
-END COMPONENT pll;
-
-	-- overall clock
-	signal clk_sys : std_logic;
-	-- reset
-	signal reset_n : std_logic;
 	-- openMSP430 output buses
 	signal per_addr : std_logic_vector(13 downto 0);
 	signal per_din : std_logic_vector(15 downto 0);
@@ -190,49 +111,7 @@ END COMPONENT pll;
 	signal per_dout_pwm_0 : std_logic_vector(15 downto 0);
 	signal per_dout_pwm_1 : std_logic_vector(15 downto 0);
 
-	signal pwm_a_0 : std_logic;
-	signal pwm_b_0 : std_logic;
-	signal pwm_a_1 : std_logic;
-	signal pwm_b_1 : std_logic;
 begin
-	-- All inout port turn to tri-state
-	DRAM_DQ <= (others => 'Z');
-	FL_DQ <= (others => 'Z');
-	SD_DAT <= 'Z';
-	I2C_SDAT <= 'Z';
-
-	GPIO_0(0) <= pwm_a_0;
-	GPIO_0(2) <= pwm_b_0;
-	GPIO_0(4) <= pwm_a_1;
-	GPIO_0(6) <= pwm_b_1;
-
-	LEDG(0) <= pwm_a_0;
-	LEDG(1) <= pwm_b_0;
-	LEDG(2) <= pwm_a_1;
-	LEDG(3) <= pwm_b_1;
-
-	GPIO_0(GPIO_0'left downto 0) <= (others => 'Z');
-	GPIO_1 <= (others => 'Z');
-	-- SDRAM blocking
-	DRAM_CS_N <= '1';
-	DRAM_CKE <= '0';
-	-- FLASH blocking
-	FL_RST_N <= '1';
-	FL_CE_N <= '1';
-	FL_OE_N <= '1';
-	FL_WE_N <= '1';
-	
---	pll0: pll
---	port map (
---		areset => not KEY(3),
---		inclk0 => CLOCK_24(0),
---		c0 => clk_sys,
---		locked => reset_n
---	);
-
-	clk_sys <= CLOCK_24(0); -- no PLL for now
-	reset_n <= KEY(3);
-
 	cpu_0: openMSP430
 		generic map (
 			INST_NR => (others => '0'),
@@ -513,8 +392,8 @@ begin
 			dout => pmem_dout
 		);
 
-	p1_din(7 downto 0) <= SW(7 downto 0);
-	LEDR(7 downto 0) <= p3_dout(7 downto 0) and p3_dout_en(7 downto 0);
+	p1_din(7 downto 0) <= sw(7 downto 0);
+	leds(7 downto 0) <= p3_dout(7 downto 0) and p3_dout_en(7 downto 0);
 
 	-- RS-232 Port
 	------------------------
@@ -526,8 +405,8 @@ begin
 --	UART_TXD <= dbg_uart_txd;
 --	dbg_uart_rxd <= UART_RXD;
 
-	UART_TXD <= hw_uart_txd;
-	hw_uart_rxd <= UART_RXD;
+	uart_txd <= hw_uart_txd;
+	hw_uart_rxd <= uart_rxd;
 --	hw_uart_rxd <= '0';
 	dbg_uart_rxd <= '0';
 

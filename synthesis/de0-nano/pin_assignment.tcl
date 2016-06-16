@@ -1,5 +1,5 @@
 #Clock
-set_location_assignment PIN_R8 -to clk_50_i
+set_location_assignment PIN_R8 -to clk_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_50
 
 #Keys (TODO loc)

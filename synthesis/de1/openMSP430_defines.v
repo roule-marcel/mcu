@@ -100,7 +100,7 @@
 
 
 // Include/Exclude Serial Debug interface
-`define DBG_EN
+//`define DBG_EN
 
 
 //============================================================================
@@ -129,7 +129,7 @@
 //        - NMI interrupt edge selection
 //        - Possibility to generate a software PUC reset
 //-------------------------------------------------------
-`define WATCHDOG
+//`define WATCHDOG
 
 
 //-------------------------------------------------------
@@ -310,7 +310,7 @@
 // WARNING: if you target an FPGA, leave this define
 //          commented.
 //-------------------------------------------------------
-`define ASIC
+//`define ASIC
 
 
 //============================================================================

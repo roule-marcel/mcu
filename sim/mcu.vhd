@@ -10,6 +10,8 @@ use work.omsp_uart_pkg.all;
 use work.per_pwm_pkg.all;
 use work.ram16_pkg.all;
 
+use work.dma_test_pkg.all;
+
 entity mcu is
 	port (
 		-- overall clock
@@ -111,6 +113,17 @@ architecture rtl of mcu is
 	signal per_dout_pwm_0 : std_logic_vector(15 downto 0);
 	signal per_dout_pwm_1 : std_logic_vector(15 downto 0);
 
+	signal trigger : std_logic;                        -- Trigger the memory erasure
+
+	signal dma_dout : std_logic_vector(15 downto 0);   -- Direct Memory Access data output
+	signal dma_ready : std_logic;                      -- Direct Memory Access is complete
+	signal dma_resp : std_logic;                       -- Direct Memory Access response (0:Okay / 1:Error)
+
+	signal dma_addr : std_logic_vector(15 downto 1);  -- Direct Memory Access address
+	signal dma_din : std_logic_vector(15 downto 0);   -- Direct Memory Access data input
+	signal dma_en : std_logic;                        -- Direct Memory Access enable (high active)
+	signal dma_priority : std_logic;                  -- Direct Memory Access priority (0:low / 1:high)
+	signal dma_we : std_logic_vector(1 downto 0);     -- Direct Memory Access write byte enable (high active)
 begin
 	cpu_0: openMSP430
 		generic map (
@@ -133,9 +146,9 @@ begin
 			lfxt_enable => open,
 			lfxt_wkup => open,
 			mclk => mclk,
-			dma_dout => open,
-			dma_ready => open,
-			dma_resp => open,
+			dma_dout => dma_dout,
+			dma_ready => dma_ready,
+			dma_resp => dma_resp,
 			per_addr => per_addr,
 			per_din => per_din,
 			per_en => per_en,
@@ -159,11 +172,11 @@ begin
 			dmem_dout => dmem_dout,
 			irq => irq_bus,
 			lfxt_clk => '0',
-			dma_addr => (others => '0'),
-			dma_din =>(others => '0') ,
-			dma_en => '0',
-			dma_priority => '0',
-			dma_we =>(others => '0') ,
+			dma_addr => dma_addr,
+			dma_din => dma_din,
+			dma_en => dma_en,
+			dma_priority => dma_priority,
+			dma_we => dma_we,
 			dma_wkup => '0',
 			nmi => nmi,
 			per_dout => per_dout,
@@ -172,6 +185,24 @@ begin
 			scan_enable => '0',
 			scan_mode => '0',
 			wkup => '0'
+		);
+
+	dma0: dma_test
+		port map (
+			mclk => mclk,
+			puc_rst => puc_rst,
+	
+			trigger => trigger,
+	
+			dma_dout => dma_dout,
+			dma_ready => dma_ready,
+			dma_resp => dma_resp,
+	
+			dma_addr => dma_addr,
+			dma_din => dma_din,
+			dma_en => dma_en,
+			dma_priority => dma_priority,
+			dma_we => dma_we
 		);
 
 	-- @0x0000 -> 0x003F
@@ -394,6 +425,8 @@ begin
 
 	p1_din(7 downto 0) <= sw(7 downto 0);
 	leds(7 downto 0) <= p3_dout(7 downto 0) and p3_dout_en(7 downto 0);
+
+	trigger <= p3_dout(7) and p3_dout_en(7);
 
 	-- RS-232 Port
 	------------------------

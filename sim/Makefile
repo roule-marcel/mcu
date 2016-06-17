@@ -5,7 +5,7 @@ TOP=$(PROJECT)_tb
 all: compile
 
 compile: $(PROJECT)_lib/
-	./build.sh
+	./build.sh |grep -i error
 #	make -f modelsim.make
 
 gui: compile

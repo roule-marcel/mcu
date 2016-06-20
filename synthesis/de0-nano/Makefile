@@ -18,13 +18,15 @@ asm: $(PRJ).sof
 
 sta: $(PRJ).sta.rpt
 
+jic: $(PRJ).jic
+
 # Configure the FPGA. Must have compiled before.
 config: $(PRJ).sof
 	quartus_pgm -c USB-Blaster -m JTAG -o p\;$(PRJ).sof
 
-epcs: $(PRJ).pof
-	@echo "Not for the moment :/"
-#	quartus_pgm -c USB-Blaster -m AS -o p\;$(PRJ).pof
+epcs: $(PRJ).jic
+	quartus_pgm -c USB-Blaster -m JTAG -o ipv\;$(PRJ).jic
+	quartus_pgm -c USB-Blaster -m JTAG -o p\;$(PRJ).sof
 
 # Hardware compilation flow
 $(PRJ).map.rpt: $(VHD) $(PRJ).qsf $(PRJ).qpf $(RAM)
@@ -38,6 +40,9 @@ $(PRJ).fit.rpt: $(PRJ).map.rpt
 $(PRJ).sof: $(PRJ).fit.rpt $(PRJ).sta.rpt
 	quartus_asm $(ARGS) $(PRJ) -c $(PRJ)
 #	quartus_asm --64bit $(ARGS) $(PRJ) -c $(PRJ)
+
+$(PRJ).jic: $(PRJ).sof
+	quartus_cpf -c -d EPCS64 -s EP4CE22 $(PRJ).sof $(PRJ).jic
 
 $(PRJ).pof: $(PRJ).sof
 

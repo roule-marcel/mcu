@@ -441,5 +441,4 @@ begin
 
 	uart_bluetooth_txd <= hw_uart_txd;
 	hw_uart_rxd <= uart_bluetooth_rxd;
-	
 end architecture rtl;

@@ -17,3 +17,11 @@
 *.sta.summary
 *.done
 *.qws
+*.jic
+
+sim/mcu_lib/
+sim/modelsim.ini
+sim/transcript
+sim/vsim.wlf
+
+synthesis/de0-nano/PLLJ_PLLSPE_INFO.txt

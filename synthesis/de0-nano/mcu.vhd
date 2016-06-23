@@ -7,6 +7,7 @@ use work.openMSP430_pkg.all;
 use work.omsp_gpio_pkg.all;
 use work.omsp_timerA_pkg.all;
 use work.omsp_uart_pkg.all;
+use work.uart_bootloader_pkg.all;
 use work.per_pwm_pkg.all;
 use work.ram16_pkg.all;
 
@@ -84,6 +85,8 @@ architecture rtl of mcu is
 	signal reset_pin : std_logic;
 
 	-- TODO sort that shit
+	signal cpu_reset_n : std_logic;
+	signal cpu_en : std_logic;
 	signal aclk_en : std_logic;
 	signal dbg_freeze : std_logic;
 	signal dbg_uart_txd : std_logic;
@@ -113,6 +116,16 @@ architecture rtl of mcu is
 	signal ta_cci2a : std_logic;
 	signal taclk : std_logic;
 
+	signal dma_dout : std_logic_vector(15 downto 0);   -- Direct Memory Access data output
+	signal dma_ready : std_logic;                      -- Direct Memory Access is complete
+	signal dma_resp : std_logic;                       -- Direct Memory Access response (0:Okay / 1:Error)
+
+	signal dma_addr : std_logic_vector(15 downto 1);  -- Direct Memory Access address
+	signal dma_din : std_logic_vector(15 downto 0);   -- Direct Memory Access data input
+	signal dma_en : std_logic;                        -- Direct Memory Access enable (high active)
+	signal dma_priority : std_logic;                  -- Direct Memory Access priority (0:low / 1:high)
+	signal dma_we : std_logic_vector(1 downto 0);     -- Direct Memory Access write byte enable (high active)
+
 	-- Simple UART
 	signal irq_uart_rx : std_logic;
 	signal irq_uart_tx : std_logic;
@@ -124,15 +137,10 @@ architecture rtl of mcu is
 	signal per_dout_pwm_l : std_logic_vector(15 downto 0);
 	signal per_dout_pwm_r : std_logic_vector(15 downto 0);
 
-	-- Choses to connect the bluetooth uart to the debug or to the uart module
-	signal uart_mode : std_logic := '0';
-
-	signal counter : natural;
-	signal blink : std_logic;
+	-- Bootloader
+	signal per_dout_uart_bootloader : std_logic_vector(15 downto 0);
+	signal cpu_reset_bootloader_n : std_logic;
 begin
---	clk_sys <= clk_50; -- no PLL for now
---	reset_n <= keys(0);
-	
 	pll_24: pll
 	port map (
 		areset => not keys(0),
@@ -141,36 +149,11 @@ begin
 		locked => reset_n
 	);
 
-	p_counter : process (reset_n, clk_sys)
-	begin
-		if (reset_n = '0') then
-			counter <= 0;
-			blink <= '0';
-		elsif rising_edge(clk_sys) then
-			if (counter < 24000000) then
-				counter <= counter + 1;
-			else
-				blink <= not blink;
-				counter <= 0;
-			end if;
-		end if;
-	end process p_counter;
-
-	leds(0) <= blink;
+	cpu_reset_n <= reset_n and cpu_reset_bootloader_n;
+	cpu_en <= not dma_priority;
 
 	pwm_l_en <= '1';
 	pwm_r_en <= '1';
-
-	p_uart_mode : process (clk_sys, reset_n)
-	begin
-		if (reset_n = '0') then
-			uart_mode <= '0';
-		elsif rising_edge(clk_sys) then
-			if ((p3_dout and p3_dout_en) = x"FF") then
-				uart_mode <= '1';
-			end if;
-		end if;
-	end process p_uart_mode;
 
 	cpu_0: openMSP430
 		generic map (
@@ -193,9 +176,9 @@ begin
 			lfxt_enable => open,
 			lfxt_wkup => open,
 			mclk => mclk,
-			dma_dout => open,
-			dma_ready => open,
-			dma_resp => open,
+			dma_dout => dma_dout,
+			dma_ready => dma_ready,
+			dma_resp => dma_resp,
 			per_addr => per_addr,
 			per_din => per_din,
 			per_en => per_en,
@@ -208,7 +191,7 @@ begin
 			smclk => open,
 			smclk_en => smclk_en,
 
-			cpu_en => '1',
+			cpu_en => cpu_en,
 			dbg_en => '0',
 			dbg_i2c_addr => (others => '0'),
 			dbg_i2c_broadcast => (others => '0'),
@@ -219,19 +202,54 @@ begin
 			dmem_dout => dmem_dout,
 			irq => irq_bus,
 			lfxt_clk => '0',
-			dma_addr => (others => '0'),
-			dma_din =>(others => '0') ,
-			dma_en => '0',
-			dma_priority => '0',
-			dma_we =>(others => '0') ,
+			dma_addr => dma_addr,
+			dma_din => dma_din,
+			dma_en => dma_en,
+			dma_priority => dma_priority,
+			dma_we => dma_we,
 			dma_wkup => '0',
 			nmi => nmi,
 			per_dout => per_dout,
 			pmem_dout => pmem_dout,
-			reset_n => reset_n,
+			reset_n => cpu_reset_n,
 			scan_enable => '0',
 			scan_mode => '0',
 			wkup => '0'
+		);
+
+	-- @0x0190 -> @0x0198
+	bootloader: uart_bootloader
+		generic map (
+			-- Register base address (must be aligned to decoder bit width)
+			BASE_ADDR => 15x"0190"
+		)
+		port map (
+			-- Memory mapped peripheral side
+			-- Configure Code memory range and start re-programmation
+			per_dout => per_dout_uart_bootloader,
+	
+			mclk => mclk,
+			per_addr => per_addr,
+			per_din => per_din,
+			per_en => per_en,
+			per_we => per_we,
+			puc_rst => puc_rst,
+	
+			-- DMA side
+			-- Actually re-program the MCU
+			dma_dout => dma_dout,
+			dma_ready => dma_ready,
+			dma_resp => dma_resp,
+	
+			dma_addr => dma_addr,
+			dma_din => dma_din,
+			dma_en => dma_en,
+			dma_priority => dma_priority,
+			dma_we => dma_we,
+
+			cpu_reset_n => cpu_reset_bootloader_n,
+	
+			uart_rxd => uart_bluetooth_rxd
 		);
 
 	-- @0x0000 -> 0x003F
@@ -379,7 +397,7 @@ begin
 
 	-- Combine peripheral data buses
 	---------------------------------
-	per_dout <= per_dout_dio or per_dout_tA or per_dout_uart or per_dout_pwm_l or per_dout_pwm_r;
+	per_dout <= per_dout_dio or per_dout_tA or per_dout_uart or per_dout_pwm_l or per_dout_pwm_r or per_dout_uart_bootloader;
 
 	-- Assign interrupts
 	---------------------------------
@@ -429,16 +447,10 @@ begin
 		);
 
 --	p1_din(7 downto 0) <= SW(7 downto 0);
---	leds <= p3_dout and p3_dout_en;
-	leds(7 downto 1) <= p3_dout(7 downto 1) and p3_dout_en(7 downto 1);
+	leds <= p3_dout and p3_dout_en;
 
 	-- RS-232 Port
 	------------------------
-	-- P1.1 (TX) and P2.2 (RX)
---	uart_bluetooth_txd <= dbg_uart_txd when uart_mode = '0' else hw_uart_txd;
---	dbg_uart_rxd <= uart_bluetooth_rxd when uart_mode = '0' else '0';
---	hw_uart_rxd <= uart_bluetooth_rxd when uart_mode = '1' else '0';
-
 	uart_bluetooth_txd <= hw_uart_txd;
 	hw_uart_rxd <= uart_bluetooth_rxd;
 end architecture rtl;

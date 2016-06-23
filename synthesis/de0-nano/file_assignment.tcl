@@ -19,6 +19,17 @@ set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_iface/rtl/per_iface_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_iface/rtl/per_iface_arch.vhd
 
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/opencores/uart2bus/vhdl/rtl/uart2BusTop_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/opencores/uart2bus/vhdl/rtl/baudGen.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/opencores/uart2bus/vhdl/rtl/uartParser.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/opencores/uart2bus/vhdl/rtl/uartRx.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/opencores/uart2bus/vhdl/rtl/uartTop.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/opencores/uart2bus/vhdl/rtl/uartTx.vhd
+
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/uart_bootloader/rtl/uart_bootloader_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/uart_bootloader/rtl/uart_bootloader_arch.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/uart_bootloader/rtl/uart_bootloader_entity.vhd
+
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/pwm_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/pwm_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_pwm/rtl/pwm_arch.vhd

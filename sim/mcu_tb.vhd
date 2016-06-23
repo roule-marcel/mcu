@@ -10,6 +10,8 @@ use work.omsp_uart_pkg.all;
 use work.per_pwm_pkg.all;
 use work.ram16_pkg.all;
 
+use work.helpers_pkg.all;
+
 entity mcu_tb is
 end entity mcu_tb;
 
@@ -69,8 +71,9 @@ begin
 	p_clk_sys: process
 	begin
 		while (simu_ended = false) loop
-			tb_clk_sys <= '0'; wait for 5 ns;
-			tb_clk_sys <= '1'; wait for 5 ns;
+			-- 24 MHz
+			tb_clk_sys <= '0'; wait for 20.833 ns;
+			tb_clk_sys <= '1'; wait for 20.833 ns;
 		end loop;
 		wait;
 	end process p_clk_sys;
@@ -92,9 +95,27 @@ begin
 			wait until rising_edge(tb_clk_sys);
 		end loop;
 
-		tb_reset_n <= '1';
+		tb_reset_n <= '1' after 2 ns;
+		tb_uart_rxd <= '1' after 2 ns;
 
-		for i in 0 to 102400 loop
+		for i in 0 to 15000 loop
+			wait until rising_edge(tb_clk_sys);
+		end loop;
+
+        sendSerial(162, 115200.0, 0, 1.0, 7, 0.0, tb_uart_rxd);
+		tb_sw <= x"0A";
+        sendSerial(225, 115200.0, 0, 1.0, 7, 0.0, tb_uart_rxd);
+		tb_sw <= x"0B";
+        sendSerial(162, 115200.0, 0, 1.0, 7, 0.0, tb_uart_rxd);
+		tb_sw <= x"0C";
+        sendSerial(225, 115200.0, 0, 1.0, 7, 0.0, tb_uart_rxd);
+		tb_sw <= x"0D";
+        sendSerial(0, 115200.0, 0, 1.0, 7, 0.0, tb_uart_rxd);
+		tb_sw <= x"0E";
+        sendSerial(224, 115200.0, 0, 1.0, 7, 0.0, tb_uart_rxd);
+		tb_sw <= x"0F";
+
+		for i in 0 to 10000 loop
 			wait until rising_edge(tb_clk_sys);
 		end loop;
 

@@ -7,6 +7,7 @@ use work.openMSP430_pkg.all;
 use work.omsp_gpio_pkg.all;
 use work.omsp_timerA_pkg.all;
 use work.omsp_uart_pkg.all;
+use work.uart_bootloader_pkg.all;
 use work.per_pwm_pkg.all;
 use work.ram16_pkg.all;
 
@@ -124,7 +125,14 @@ architecture rtl of mcu is
 	signal dma_en : std_logic;                        -- Direct Memory Access enable (high active)
 	signal dma_priority : std_logic;                  -- Direct Memory Access priority (0:low / 1:high)
 	signal dma_we : std_logic_vector(1 downto 0);     -- Direct Memory Access write byte enable (high active)
+
+	signal per_dout_uart_bootloader : std_logic_vector(15 downto 0);
+
+	signal cpu_reset_n : std_logic;
+	signal cpu_reset_bootloader_n : std_logic;
 begin
+	cpu_reset_n <= reset_n and cpu_reset_bootloader_n;
+
 	cpu_0: openMSP430
 		generic map (
 			INST_NR => (others => '0'),
@@ -161,7 +169,7 @@ begin
 			smclk => open,
 			smclk_en => smclk_en,
 
-			cpu_en => '1',
+			cpu_en => not dma_priority, -- TODO '1',
 			dbg_en => '1',
 			dbg_i2c_addr => (others => '0'),
 			dbg_i2c_broadcast => (others => '0'),
@@ -181,19 +189,32 @@ begin
 			nmi => nmi,
 			per_dout => per_dout,
 			pmem_dout => pmem_dout,
-			reset_n => reset_n,
+			reset_n => cpu_reset_n,
 			scan_enable => '0',
 			scan_mode => '0',
 			wkup => '0'
 		);
 
-	dma0: dma_test
+	-- @0x0190 -> @0x0198
+	bootloader: uart_bootloader
+		generic map (
+			-- Register base address (must be aligned to decoder bit width)
+			BASE_ADDR => 15x"0190"
+		)
 		port map (
+			-- Memory mapped peripheral side
+			-- Configure Code memory range and start re-programmation
+			per_dout => per_dout_uart_bootloader,
+	
 			mclk => mclk,
+			per_addr => per_addr,
+			per_din => per_din,
+			per_en => per_en,
+			per_we => per_we,
 			puc_rst => puc_rst,
 	
-			trigger => trigger,
-	
+			-- DMA side
+			-- Actually re-program the MCU
 			dma_dout => dma_dout,
 			dma_ready => dma_ready,
 			dma_resp => dma_resp,
@@ -202,7 +223,11 @@ begin
 			dma_din => dma_din,
 			dma_en => dma_en,
 			dma_priority => dma_priority,
-			dma_we => dma_we
+			dma_we => dma_we,
+
+			cpu_reset_n => cpu_reset_bootloader_n,
+	
+			uart_rxd => uart_rxd
 		);
 
 	-- @0x0000 -> 0x003F
@@ -308,7 +333,7 @@ begin
 			uart_rxd => hw_uart_rxd
 		);
 
-	-- @0x0100 -> 0x0107
+	-- @0x0180 -> 0x0187
 	per_pwm_0: per_pwm
 	generic map (
 		-- Register base address (must be aligned to decoder bit width)
@@ -328,7 +353,7 @@ begin
 		pwm_b => pwm_b_0
 	);
 
-	-- @0x0108 -> 0x010F
+	-- @0x0188 -> 0x018F
 	per_pwm_1: per_pwm
 	generic map (
 		-- Register base address (must be aligned to decoder bit width)

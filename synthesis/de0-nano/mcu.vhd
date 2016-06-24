@@ -9,6 +9,7 @@ use work.omsp_timerA_pkg.all;
 use work.omsp_uart_pkg.all;
 use work.uart_bootloader_pkg.all;
 use work.per_pwm_pkg.all;
+use work.per_qei_pkg.all;
 use work.ram16_pkg.all;
 
 entity mcu is
@@ -27,7 +28,12 @@ entity mcu is
 		pwm_l_en : out std_logic;
 		pwm_r_a : out std_logic;
 		pwm_r_b : out std_logic;
-		pwm_r_en : out std_logic
+		pwm_r_en : out std_logic;
+
+		qei_l_a : in std_logic;
+		qei_l_b : in std_logic;
+		qei_r_a : in std_logic;
+		qei_r_b : in std_logic
 	);
 end entity mcu;
 
@@ -140,6 +146,10 @@ architecture rtl of mcu is
 	-- Bootloader
 	signal per_dout_uart_bootloader : std_logic_vector(15 downto 0);
 	signal cpu_reset_bootloader_n : std_logic;
+
+	-- QEI
+	signal per_dout_qei_l : std_logic_vector(15 downto 0);
+	signal per_dout_qei_r : std_logic_vector(15 downto 0);
 begin
 	pll_24: pll
 	port map (
@@ -250,6 +260,46 @@ begin
 			cpu_reset_n => cpu_reset_bootloader_n,
 	
 			uart_rxd => uart_bluetooth_rxd
+		);
+
+	-- @0x0198 -> @0x019A
+	qei_l: per_qei
+		generic map (
+			-- Register base address (must be aligned to decoder bit width)
+			BASE_ADDR => 15x"0198"
+		)
+		port map (
+			per_dout => per_dout_qei_l,
+	
+			mclk => mclk,
+			per_addr => per_addr,
+			per_din => per_din,
+			per_en => per_en,
+			per_we => per_we,
+			puc_rst => puc_rst,
+	
+			qei_a => qei_l_a,
+			qei_b => qei_l_b
+		);
+
+	-- @0x019A -> @0x019C
+	qei_r: per_qei
+		generic map (
+			-- Register base address (must be aligned to decoder bit width)
+			BASE_ADDR => 15x"019A"
+		)
+		port map (
+			per_dout => per_dout_qei_r,
+	
+			mclk => mclk,
+			per_addr => per_addr,
+			per_din => per_din,
+			per_en => per_en,
+			per_we => per_we,
+			puc_rst => puc_rst,
+	
+			qei_a => qei_r_a,
+			qei_b => qei_r_b
 		);
 
 	-- @0x0000 -> 0x003F

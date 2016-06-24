@@ -4,7 +4,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_50
 
 #Keys (TODO loc)
 ##GPIO_019
-set_location_assignment PIN_D8 -to keys[0]
+set_location_assignment PIN_F9 -to keys[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to keys[0]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to keys[0]
 ##GPIO_021
@@ -62,3 +62,17 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pwm_r_en
 ##GPIO_029
 set_location_assignment PIN_B11 -to pwm_r_b
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pwm_r_b
+
+#QEI (TODO LOC)
+##GPIO_016
+set_location_assignment PIN_C8 -to qei_l_a
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_l_a
+##GPIO_017
+set_location_assignment PIN_E6 -to qei_l_b
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_l_b
+##GPIO_018
+set_location_assignment PIN_E7 -to qei_r_a
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_r_a
+##GPIO_019
+set_location_assignment PIN_D8 -to qei_r_b
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_r_b

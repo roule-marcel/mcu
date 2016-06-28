@@ -2,12 +2,12 @@
 set_location_assignment PIN_R8 -to clk_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to clk_50
 
-#Keys (TODO loc)
-##GPIO_019
-set_location_assignment PIN_F9 -to keys[0]
+#Keys
+##GPIO_013
+set_location_assignment PIN_D6 -to keys[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to keys[0]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to keys[0]
-##GPIO_021
+##GPIO_021 (TODO loc)
 set_location_assignment PIN_F8 -to keys[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to keys[1]
 set_instance_assignment -name WEAK_PULL_UP_RESISTOR ON -to keys[1]

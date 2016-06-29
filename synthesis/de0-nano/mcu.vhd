@@ -286,7 +286,7 @@ begin
 	qei_r: per_qei
 		generic map (
 			-- Register base address (must be aligned to decoder bit width)
-			BASE_ADDR => 15x"019A"
+			BASE_ADDR => 15x"019C"
 		)
 		port map (
 			per_dout => per_dout_qei_r,

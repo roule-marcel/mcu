@@ -447,7 +447,7 @@ begin
 
 	-- Combine peripheral data buses
 	---------------------------------
-	per_dout <= per_dout_dio or per_dout_tA or per_dout_uart or per_dout_pwm_l or per_dout_pwm_r or per_dout_uart_bootloader;
+	per_dout <= per_dout_dio or per_dout_tA or per_dout_uart or per_dout_pwm_l or per_dout_pwm_r or per_dout_uart_bootloader or per_dout_qei_l or per_dout_qei_r;
 
 	-- Assign interrupts
 	---------------------------------

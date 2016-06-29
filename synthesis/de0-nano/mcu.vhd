@@ -262,7 +262,7 @@ begin
 			uart_rxd => uart_bluetooth_rxd
 		);
 
-	-- @0x0198 -> @0x019A
+	-- @0x0198 -> @0x019B
 	qei_l: per_qei
 		generic map (
 			-- Register base address (must be aligned to decoder bit width)
@@ -282,7 +282,7 @@ begin
 			qei_b => qei_l_b
 		);
 
-	-- @0x019A -> @0x019C
+	-- @0x019C -> @0x019F
 	qei_r: per_qei
 		generic map (
 			-- Register base address (must be aligned to decoder bit width)

@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 package openMSP430_pkg is
 	-- `define DMEM_SIZE_1_KB
-	constant DMEM_AWIDTH : positive := 9;
+	constant DMEM_AWIDTH : positive := 10;
 	-- `define PMEM_SIZE_8_KB
 	constant PMEM_AWIDTH : positive := 12;
 	-- `define IRQ_16

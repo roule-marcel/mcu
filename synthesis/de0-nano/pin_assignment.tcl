@@ -35,12 +35,20 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to leds[7]
 set_location_assignment PIN_D12 -to buzzer
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to buzzer
 
-#UART Bluetooth
-##GPIO_025
-set_location_assignment PIN_D9 -to uart_bluetooth_rxd
+##UART Bluetooth
+###GPIO_025
+#set_location_assignment PIN_D9 -to uart_bluetooth_rxd
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_bluetooth_rxd
+###GPIO_027
+#set_location_assignment PIN_E10 -to uart_bluetooth_txd
+#set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_bluetooth_txd
+
+#UART RPi
+##GPIO_115
+set_location_assignment PIN_N11 -to uart_bluetooth_rxd
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_bluetooth_rxd
-##GPIO_027
-set_location_assignment PIN_E10 -to uart_bluetooth_txd
+##GPIO_113
+set_location_assignment PIN_P9 -to uart_bluetooth_txd
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to uart_bluetooth_txd
 
 #PWM

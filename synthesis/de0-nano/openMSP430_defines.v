@@ -68,9 +68,9 @@
 //`define PMEM_SIZE_41_KB
 //`define PMEM_SIZE_32_KB
 //`define PMEM_SIZE_24_KB
-//`define PMEM_SIZE_16_KB
+`define PMEM_SIZE_16_KB
 //`define PMEM_SIZE_12_KB
-`define PMEM_SIZE_8_KB
+//`define PMEM_SIZE_8_KB
 //`define PMEM_SIZE_4_KB
 //`define PMEM_SIZE_2_KB
 //`define PMEM_SIZE_1_KB

@@ -5,7 +5,7 @@ package openMSP430_pkg is
 	-- `define DMEM_SIZE_1_KB
 	constant DMEM_AWIDTH : positive := 10;
 	-- `define PMEM_SIZE_8_KB
-	constant PMEM_AWIDTH : positive := 12;
+	constant PMEM_AWIDTH : positive := 13;
 	-- `define IRQ_16
 	constant IRQ_NR : positive := 16;
 

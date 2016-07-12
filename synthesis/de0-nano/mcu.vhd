@@ -10,6 +10,7 @@ use work.omsp_uart_pkg.all;
 use work.uart_bootloader_pkg.all;
 use work.per_pwm_pkg.all;
 use work.per_qei_pkg.all;
+use work.per_buzzer_pkg.all;
 use work.ram16_pkg.all;
 
 entity mcu is
@@ -150,6 +151,9 @@ architecture rtl of mcu is
 	-- QEI
 	signal per_dout_qei_l : std_logic_vector(15 downto 0);
 	signal per_dout_qei_r : std_logic_vector(15 downto 0);
+
+	-- Buzzer
+	signal per_dout_buzzer : std_logic_vector(15 downto 0);
 begin
 	pll_24: pll
 	port map (
@@ -302,6 +306,25 @@ begin
 			qei_b => qei_r_b
 		);
 
+	-- @0x01A0 -> @0x01A0
+	buzzer0: per_buzzer
+		generic map (
+			-- Register base address (must be aligned to decoder bit width)
+			BASE_ADDR => 15x"01A0"
+		)
+		port map (
+			per_dout => per_dout_buzzer,
+	
+			mclk => mclk,
+			per_addr => per_addr,
+			per_din => per_din,
+			per_en => per_en,
+			per_we => per_we,
+			puc_rst => puc_rst,
+	
+			buzzer => buzzer
+		);
+
 	-- @0x0000 -> 0x003F
 	c_gpio_0: omsp_gpio
 		generic map (
@@ -447,7 +470,7 @@ begin
 
 	-- Combine peripheral data buses
 	---------------------------------
-	per_dout <= per_dout_dio or per_dout_tA or per_dout_uart or per_dout_pwm_l or per_dout_pwm_r or per_dout_uart_bootloader or per_dout_qei_l or per_dout_qei_r;
+	per_dout <= per_dout_dio or per_dout_tA or per_dout_uart or per_dout_pwm_l or per_dout_pwm_r or per_dout_uart_bootloader or per_dout_qei_l or per_dout_qei_r or per_dout_buzzer;
 
 	-- Assign interrupts
 	---------------------------------

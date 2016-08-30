@@ -71,7 +71,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pwm_r_en
 set_location_assignment PIN_B11 -to pwm_r_b
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to pwm_r_b
 
-#QEI (TODO LOC)
+#QEI
 ##GPIO_014
 set_location_assignment PIN_A7 -to qei_l_a
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_l_a
@@ -84,3 +84,23 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_r_a
 ##GPIO_008
 set_location_assignment PIN_A5 -to qei_r_b
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to qei_r_b
+
+#SRF05
+##Trigger GPIO_131
+set_location_assignment PIN_K15 -to srf05_trigger
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to srf05_trigger
+##Echo 0 GPIO_129
+set_location_assignment PIN_L13 -to srf05_echo[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to srf05_echo[0]
+##Echo 1 GPIO_127
+set_location_assignment PIN_N14 -to srf05_echo[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to srf05_echo[1]
+##Echo 2 GPIO_125
+set_location_assignment PIN_P14 -to srf05_echo[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to srf05_echo[2]
+##Echo 3 GPIO_123
+set_location_assignment PIN_N16 -to srf05_echo[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to srf05_echo[3]
+##Echo 4 GPIO_121
+set_location_assignment PIN_P16 -to srf05_echo[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to srf05_echo[4]

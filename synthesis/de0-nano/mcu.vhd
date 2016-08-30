@@ -34,7 +34,10 @@ entity mcu is
 		qei_l_a : in std_logic;
 		qei_l_b : in std_logic;
 		qei_r_a : in std_logic;
-		qei_r_b : in std_logic
+		qei_r_b : in std_logic;
+
+		srf05_trigger : out std_logic;
+		srf05_echo : in std_logic_vector(4 downto 0)
 	);
 end entity mcu;
 

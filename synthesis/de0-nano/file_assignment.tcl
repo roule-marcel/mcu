@@ -40,17 +40,22 @@ set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/qei_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/qei_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/qei_arch.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/qei_tb.vhd
 
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/per_qei_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/per_qei_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/per_qei_arch.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_qei/rtl/per_qei_tb.vhd
 
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_buzzer/rtl/per_buzzer_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_buzzer/rtl/per_buzzer_entity.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_buzzer/rtl/per_buzzer_arch.vhd
-set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_buzzer/rtl/per_buzzer_tb.vhd
+
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_srf05/rtl/srf05_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_srf05/rtl/srf05_entity.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_srf05/rtl/srf05_arch.vhd
+
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_srf05/rtl/per_srf05_pkg.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_srf05/rtl/per_srf05_entity.vhd
+set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/per_srf05/rtl/per_srf05_arch.vhd
 
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/init_ram16_pkg.vhd
 set_global_assignment -name VHDL_FILE $LIBSOFTCORE_PATH/src/omsp_peripherals/ram16/rtl/ram16_pkg.vhd
